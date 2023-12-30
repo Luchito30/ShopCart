@@ -1,10 +1,13 @@
+// Importación de módulos y componentes
 import { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Modal, Button, Form, ListGroup, Col, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
 import * as CardValidator from "card-validator";
 
+// Define un componente funcional llamado Checkout
 const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
+    // Define variables de estado usando el hook useState
     const [paymentMethod, setPaymentMethod] = useState("efectivo");
     const [email, setEmail] = useState("");
     const [cardType, setCardType] = useState("visa");
@@ -16,38 +19,34 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
     const [city, setCity] = useState("");
     const [cardHolder, setCardHolder] = useState("");
 
-    console.log("Current State:", {
-        paymentMethod,
-        email,
-        cardType,
-        cardNumber,
-        expiryDate,
-        securityCode,
-        street,
-        postalCode,
-        city,
-        cardHolder,
-    });
-
+    // Función para manejar la compra según el método de pago seleccionado
     const handlePurchase = () => {
+        // Verifica si el método de pago es 'efectivo' (efectivo)
         if (paymentMethod === "efectivo") {
+            // Verifica si los campos requeridos están llenos para el pago en efectivo
             if (email && validateEmail(email) && street && postalCode && city) {
+                // Simula la compra con pago en efectivo
                 simulatePurchase({
                     method: "efectivo",
                     email,
                     address: { street, postalCode, city },
                     cart,
                 });
+                // Limpia el carrito y muestra una alerta de éxito
                 setCart([]);
                 showSuccessAlert();
+                // Llama a la función de devolución onComplete
                 onComplete();
             } else {
+                // Muestra un error de validación si los campos requeridos no están llenos
                 showValidationError(
                     "Por favor, completa la información de pago y dirección."
                 );
             }
         } else if (paymentMethod === "tarjeta") {
+            // Verifica si los campos requeridos están llenos para el pago con tarjeta
             if (validateCardInfo() && street && postalCode && city) {
+                // Simula la compra con pago con tarjeta
                 simulatePurchase({
                     method: "tarjeta",
                     cardType,
@@ -58,10 +57,13 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
                     address: { street, postalCode, city },
                     cart,
                 });
+                // Limpia el carrito y muestra una alerta de éxito
                 setCart([]);
                 showSuccessAlert();
+                // Llama a la función de devolución onComplete
                 onComplete();
             } else {
+                // Muestra un error de validación si los campos requeridos no están llenos
                 showValidationError(
                     "Por favor, completa la información de la tarjeta y dirección."
                 );
@@ -69,6 +71,7 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
         }
     };
 
+    // Función para mostrar una alerta de éxito
     const showSuccessAlert = () => {
         if (paymentMethod === "efectivo") {
             Swal.fire({
@@ -85,6 +88,7 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
         }
     };
 
+    // Función para mostrar un error de validación
     const showValidationError = (message) => {
         let errorMessage = 'Error de Validación:\n' + message;
 
@@ -95,11 +99,13 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
         });
     };
 
+    // Función para validar un correo electrónico
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
 
+    // Función para validar la información de la tarjeta de crédito
     const validateCardInfo = () => {
         const isAmex = cardType === "amex";
         return (
@@ -112,15 +118,19 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
         );
     };
 
+    // Función para calcular el total de un artículo en el carrito
     const calculateItemTotal = (item) => {
         return (item.product.price * item.quantity).toFixed(2);
     };
 
+    // Función para obtener el tipo de tarjeta de crédito
     const getCardType = (cardNumber) => {
         const cardInfo = CardValidator.number(cardNumber);
         return cardInfo.card?.type || "unknown";
     };
 
+    // Función para formatear el número de tarjeta de crédito
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const formatCardNumber = (cardNumber) => {
         const numArray = cardNumber.replace(/\D/g, '').split('');
         const cardType = getCardType(numArray.join(''));
@@ -142,21 +152,21 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
         }
     };
 
+    // Función para manejar el cambio en el titular de la tarjeta
     const handleCardHolderChange = useCallback((e) => {
         const inputValue = e.target.value.replace(/[^A-Za-z ]/g, "");
-        console.log('Card Holder:', inputValue);
         setCardHolder(inputValue);
     }, []);
 
+    // Función para manejar el cambio en el código de seguridad de la tarjeta
     const handleSecurityCodeChange = useCallback((e) => {
         const inputValue = e.target.value.replace(/\D/g, '');
-        console.log('Security Code:', inputValue);
         setSecurityCode(inputValue);
     }, []);
 
+    // Función para manejar el cambio en la fecha de vencimiento de la tarjeta
     const handleExpiryDateChange = useCallback((e) => {
         const inputValue = e.target.value.replace(/\D/g, '');
-        console.log('Expiry Date:', inputValue);
         let formattedValue = inputValue;
 
         if (inputValue.length > 2) {
@@ -166,20 +176,19 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
         setExpiryDate(formattedValue);
     }, []);
 
-
+    // Función para manejar el cambio en el número de tarjeta de crédito
     const handleCardNumberChange = useCallback((e) => {
         const formattedNumber = formatCardNumber(e.target.value);
         setCardNumber(formattedNumber);
-    }, []);
+    }, [formatCardNumber]);
 
-    // Función para manejar el cambio de tipo de tarjeta
+    // Función para manejar el cambio en el tipo de tarjeta
     const handleCardTypeChange = (e) => {
-        console.log('Changing card type...');
         const newCardType = e.target.value;
 
-        // Verificar si el tipo de tarjeta ha cambiado
+        // Verifica si el tipo de tarjeta ha cambiado
         if (newCardType !== cardType) {
-            // Restablecer todos los campos
+            // Restablece todos los campos
             setCardNumber('');
             setExpiryDate('');
             setSecurityCode('');
@@ -187,16 +196,16 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
             setStreet('');
             setPostalCode('');
             setCity('');
-            console.log('Card type changed successfully.');
         }
 
-        // Actualizar el tipo de tarjeta
+        // Actualiza el tipo de tarjeta
         setCardType(newCardType);
     };
 
+    // Función para verificar si todos los datos necesarios están completos
     const isDataComplete = () => {
         if (paymentMethod === 'efectivo') {
-            // Check required fields for payment with cash
+            // Verifica los campos requeridos para el pago en efectivo
             const requiredFields = ['email', 'street', 'postalCode', 'city'];
 
             for (const field of requiredFields) {
@@ -205,7 +214,7 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
                 }
             }
         } else if (paymentMethod === 'tarjeta') {
-            // Check required fields for payment with card
+            // Verifica los campos requeridos para el pago con tarjeta
             const requiredFields = ['cardHolder', 'cardNumber', 'expiryDate', 'securityCode', 'street', 'postalCode', 'city'];
 
             for (const field of requiredFields) {
@@ -218,20 +227,18 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
         return true;
     };
 
+    // Función para manejar la validación de datos antes de la compra
     const handleValidation = () => {
         if (isDataComplete()) {
-            // Realizar la validación completa aquí
-            console.log('Validación completa');
-            // Llamar a la función handlePurchase después de la validación
+            // Llama a la función handlePurchase después de la validación
             handlePurchase();
         } else {
-            console.log('Por favor, complete todos los campos requeridos');
-
-            // Mostrar SweetAlert indicando que faltan completar datos
+            // Muestra un SweetAlert indicando que faltan completar datos
             showValidationError('Por favor, complete todos los campos requeridos');
         }
     };
 
+     // Renderizado del componente
     return (
         <Modal show={true} onHide={onComplete} centered>
             <Modal.Header closeButton>
@@ -470,11 +477,14 @@ const Checkout = ({ cart, setCart, simulatePurchase, onComplete }) => {
     );
 };
 
+// Definición de los tipos de propiedades esperadas por el componente
 Checkout.propTypes = {
-    cart: PropTypes.array.isRequired,
-    setCart: PropTypes.func.isRequired,
-    simulatePurchase: PropTypes.func.isRequired,
-    onComplete: PropTypes.func.isRequired,
+    cart: PropTypes.array.isRequired, // Contenido del carrito
+    setCart: PropTypes.func.isRequired, // Función para actualizar el contenido del carrito
+    simulatePurchase: PropTypes.func.isRequired, // Función para simular la compra
+    onComplete: PropTypes.func.isRequired, // Función que se ejecuta al completar la compra
 };
 
+// Exportar el componente Checkout como componente por defecto
 export default Checkout;
+

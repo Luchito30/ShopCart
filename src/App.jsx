@@ -102,7 +102,6 @@ const App = () => {
   // Función para manejar la adición de productos al carrito
   const handleAddToCart = (product) => {
     if (isLoggedIn) {
-      console.log('Intento de añadir producto al carrito:', product);
       addToCart(product);
     } else {
       // Muestra una alerta si el usuario no está logeado

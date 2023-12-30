@@ -118,7 +118,7 @@ const App = () => {
     <div className="app-container" style={{ backgroundColor: '#343a40', color: '#f8f9fa' }}>
       {/* Barra de navegación */}
       <Navbar bg="dark" expand="lg" variant="dark" style={{ paddingLeft: '30px', paddingRight: '30px' }}>
-        <Navbar.Brand as="a" href="/" style={{ fontSize: '40px' }}>
+        <Navbar.Brand as="a" href="/index.html" style={{ fontSize: '40px' }}>
           ShopCart
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarNav" />

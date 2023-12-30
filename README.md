@@ -2,11 +2,18 @@
 
 **Proyecto Carrito de Compras 🛒**
 
+Para iniciar el proyecto, es necesario ejecutar el siguiente comando en la consola: 
 ```
-Para iniciar el proyecto, es necesario ejecutar el siguiente comando en la consola: npm i. Este comando descargará todas las dependencias necesarias.
+npm i
+```
+Este comando descargará todas las dependencias necesarias.
 
-Posteriormente, para ejecutar el proyecto, se debe utilizar el comando: npm run dev. Esto iniciará el proyecto y generará un enlace local: http://localhost:5173/. Puedes acceder al proyecto a través de este enlace.
+Posteriormente, para ejecutar el proyecto, se debe utilizar el comando: 
 ```
+npm run dev
+```
+Esto iniciará el proyecto y generará un enlace local: http://localhost:5173/. Puedes acceder al proyecto a través de este enlace.
+
 
 El proyecto ShopCart es una plataforma de comercio electrónico que ofrece productos consumidos desde una API de terceros: https://fakestoreapi.com/. La información obtenida incluye imágenes, títulos, descripciones y precios de los productos.
 

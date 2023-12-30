@@ -21,8 +21,22 @@ En la página de inicio, en el encabezado, podrás visualizar el nombre del proy
 
 Para agregar productos o habilitar el carrito, es necesario iniciar sesión. Se han creado dos usuarios estáticos para este propósito:
 
-Usuario 1: username: user1, contraseña: password1
-Usuario 2: username: 'user2', contraseña: 'password2'
+Usuario 1: 
+```
+user1
+```
+ contraseña: 
+```
+password1
+```
+Usuario 2: 
+```
+user2
+```
+contraseña: 
+```
+password2
+```
 
 Al iniciar sesión con cualquiera de estos dos usuarios, podrás agregar productos al carrito. Dentro del carrito, es posible seleccionar múltiples unidades del mismo producto, y el sistema calculará el precio total sumando la cantidad por el precio unitario.
 
